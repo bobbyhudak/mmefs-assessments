@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MMEFS — Current Assessment</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+  :root {
+    --ink: #1c1c1c;
+    --paper: #f5f0e8;
+    --rule: #c8b89a;
+    --accent: #8b1a1a;
+    --gold: #b8860b;
+    --muted: #7a6e60;
+    --light: #ede8dc;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 40px 24px 80px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* MASTHEAD */
+  .masthead {
+    border-top: 3px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 16px 0 12px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .masthead-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .masthead-meta {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  .dateline {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 8px;
+    margin-bottom: 28px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* VERDICT BOX — leads the piece */
+  .verdict {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  .verdict-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .verdict-text {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: #f0ebe0;
+  }
+
+  .verdict-text strong {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  /* TWO COLUMN LAYOUT */
+  .columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-bottom: 28px;
+  }
+
+  /* SECTIONS */
+  .section {
+    margin-bottom: 28px;
+  }
+
+  .section-rule {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .section-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  p {
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  /* DATA ROWS */
+  .data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--light);
+    gap: 16px;
+  }
+
+  .data-row:last-child { border-bottom: none; }
+
+  .data-label {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    flex-shrink: 0;
+  }
+
+  .data-value {
+    font-size: 13px;
+    font-weight: 600;
+    text-align: right;
+    color: var(--ink);
+  }
+
+  .data-value.accent { color: var(--accent); }
+  .data-value.gold { color: var(--gold); }
+
+  /* SCENARIO TABLE */
+  .scenario {
+    margin-bottom: 6px;
+    padding: 10px 14px;
+    background: var(--light);
+    border-left: 3px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .scenario.hot { border-left-color: var(--gold); background: #fdf8ee; }
+  .scenario.cold { border-left-color: #999; background: #f0ece4; }
+  .scenario.fire { border-left-color: var(--accent); background: #fdf0f0; }
+
+  .scenario-name { font-size: 13px; font-weight: 600; }
+  .scenario-desc { font-size: 11px; color: var(--muted); font-style: italic; margin-top: 2px; }
+  .scenario-prob { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--muted); text-align: right; }
+  .scenario-payout { font-size: 13px; font-weight: 600; color: var(--gold); text-align: right; white-space: nowrap; }
+
+  /* TIMELINE */
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 16px;
+    margin-bottom: 10px;
+    align-items: start;
+  }
+
+  .tl-date {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    padding-top: 1px;
+  }
+
+  .tl-event { font-size: 13px; line-height: 1.5; }
+  .tl-event strong { font-weight: 600; }
+  .tl-event .note { font-size: 11px; color: var(--muted); font-style: italic; }
+
+  /* PRODUCTION BOX */
+  .prod-box {
+    background: var(--light);
+    border: 1px solid var(--rule);
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+
+  .big-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+
+  .big-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .prod-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  /* LIABILITY BOX */
+  .liability {
+    border: 1px solid var(--rule);
+    padding: 14px 18px;
+    background: #fafaf7;
+  }
+
+  .liability-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px dotted var(--rule);
+    font-size: 13px;
+  }
+
+  .liability-item:last-child { border-bottom: none; }
+  .liability-item span:last-child { font-weight: 600; color: var(--gold); }
+
+  /* CONDITIONS */
+  .condition {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 8px;
+    align-items: flex-start;
+  }
+
+  .cond-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--rule);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 24px;
+  }
+
+  .cond-text { font-size: 13px; line-height: 1.5; }
+  .cond-text strong { color: var(--accent); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--rule);
+    margin-top: 40px;
+    padding-top: 12px;
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 600px) {
+    .columns { grid-template-columns: 1fr; }
+    .prod-grid { grid-template-columns: 1fr 1fr; }
+    .masthead { flex-direction: column; gap: 8px; }
+    .masthead-meta { text-align: left; }
+    .scenario { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-title">MMEFS LLC</div>
+  <div class="masthead-meta">
+    May v. INEOS CHK · 25-BC04B-0007<br>
+    Texas Business Court, 4th Division<br>
+    Assessment Date: April 21, 2026
+  </div>
+</div>
+
+<div class="dateline">Investment Position · Current Assessment · Not Legal or Financial Advice</div>
+
+<!-- VERDICT -->
+<div class="verdict">
+  <div class="verdict-label">Assessment</div>
+  <div class="verdict-text">
+    At <strong>$10,000</strong> this is a reasonable speculative position. The asset is real, CIC is a named plaintiff with active counsel, September trial is court-ordered, and the LLC structure caps your personal liability at zero. The <strong>April 28 hearing</strong> is the pivotal event — a well-by-well ruling materially improves every scenario. Base case gets your money back. The upside is real.
+  </div>
+</div>
+
+<!-- TWO COLUMNS: YOUR INTEREST + PRODUCTION -->
+<div class="columns">
+
+  <div>
+    <div class="section-rule">
+      <div class="section-label">Your Interest</div>
+      <div class="section-line"></div>
+    </div>
+    <div class="data-row">
+      <span class="data-label">Conveyed interest</span>
+      <span class="data-value">0.50% BPO of CIC</span>
+    </div>
+    <div class="data-row">
+      <span class="data-label">APO equivalent</span>
+      <span class="data-value gold">0.10% of Farmor pool</span>
+    </div>
+    <div class="data-row">
+      <span class="data-label">Farmor pool back-in</span>
+      <span class="data-value">30% of APO revenue</span>
+    </div>
+    <div class="data-row">
+      <span class="data-label">Your share of gross production</span>
+      <span class="data-value">0.03%</span>
+    </div>
+    <div class="data-row">
+      <span class="data-label">Confirmed payout wells</span>
+      <span class="data-value gold">11 of 34</span>
+    </div>
+    <div class="data-row">
+      <span class="data-label">Additional wells if well-by-well wins</span>
+      <span class="data-value">Potentially significant</span>
+    </div>
+    <div class="data-row">
+      <span class="data-label">Leasehold acreage</span>
+      <span class="data-value">5,063 acres, McMullen Co.</span>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-rule">
+      <div class="section-label">Production Value</div>
+      <div class="section-line"></div>
+    </div>
+    <div class="data-row">
+      <span class="data-label">INEOS acquisition price</span>
+      <span class="data-value">$1.4B (full portfolio)</span>
+    </div>
+    <div class="data-row">
+      <span class="data-label">INEOS-admitted back-pay (7 months)</span>
+      <span class="data-value gold">$4,763,595</span>
+    </div>
+    <div class="data-row">
+      <span class="data-label">Annualized Farmor pool revenue</span>
+      <span class="data-value">~$8M/year</span>
+    </div>
+    <div class="data-row">
+      <span class="data-label">Extrapolated back-pay (51 months)</span>
+      <span class="data-value accent">~$34.7M floor</span>
+    </div>
+    <div class="data-row">
+      <span class="data-label">Plus 8% statutory interest since Jan 2022</span>
+      <span class="data-value accent">Significant additive</span>
+    </div>
+    <div class="data-row">
+      <span class="data-label">Your 0.10% monthly (current production)</span>
+      <span class="data-value gold">~$600/month</span>
+    </div>
+    <div class="data-row">
+      <span class="data-label">Estimated payback from production alone</span>
+      <span class="data-value">~16 months</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- SCENARIOS -->
+<div class="section">
+  <div class="section-rule">
+    <div class="section-label">Probability-Weighted Outcomes</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="scenario cold">
+    <div>
+      <div class="scenario-name">Defense wins at trial</div>
+      <div class="scenario-desc">Defendants prevail; no back-pay, no ongoing rights</div>
+    </div>
+    <div class="scenario-prob">15%</div>
+    <div class="scenario-payout" style="color:#999">$0</div>
+  </div>
+
+  <div class="scenario cold">
+    <div>
+      <div class="scenario-name">Settles at or below $10M — wash</div>
+      <div class="scenario-desc">Lump sum buyout at base case; break even</div>
+    </div>
+    <div class="scenario-prob">25%</div>
+    <div class="scenario-payout">$10,000</div>
+  </div>
+
+  <div class="scenario hot">
+    <div>
+      <div class="scenario-name">Well-by-well wins; $20–50M settlement</div>
+      <div class="scenario-desc">April 28 goes plaintiffs' way; mediation in July produces real number</div>
+    </div>
+    <div class="scenario-prob">35%</div>
+    <div class="scenario-payout">$20K–$50K</div>
+  </div>
+
+  <div class="scenario hot">
+    <div>
+      <div class="scenario-name">Rights restored; INEOS buyout offer</div>
+      <div class="scenario-desc">Court recognizes ongoing 30% WI; INEOS pays to clean title permanently</div>
+    </div>
+    <div class="scenario-prob">15%</div>
+    <div class="scenario-payout">$50K–$100K</div>
+  </div>
+
+  <div class="scenario fire">
+    <div>
+      <div class="scenario-name">Covenants win; full forfeiture + exemplary damages</div>
+      <div class="scenario-desc">Lease forfeiture, disgorgement of all revenues, punitive damages</div>
+    </div>
+    <div class="scenario-prob">10%</div>
+    <div class="scenario-payout" style="color:var(--accent)">$100K+</div>
+  </div>
+
+  <p style="margin-top:12px; font-size:12px; color:var(--muted); font-style:italic;">Weighted expected value: approximately $25,000–$35,000 on a $10,000 investment.</p>
+</div>
+
+<!-- TIMELINE + LIABILITY SIDE BY SIDE -->
+<div class="columns">
+
+  <div>
+    <div class="section-rule">
+      <div class="section-label">What Happens Next</div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-date">Apr 28</div>
+      <div class="tl-event"><strong>MSJ Hearing — 1:30pm Zoom</strong><br><span class="note">Pivotal. Well-by-well vs. aggregated payout. Same judge who ruled for defense March 27 — but plaintiffs' April 13 reply is strong.</span></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-date">Jun 3</div>
+      <div class="tl-event"><strong>Mediation Agreement Due</strong><br><span class="note">Parties must agree to mediate or formally opt out.</span></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-date">Jul 1</div>
+      <div class="tl-event"><strong>Mediation Deadline</strong><br><span class="note">Primary settlement window. Most likely exit point.</span></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-date">Jul 2</div>
+      <div class="tl-event"><strong>Discovery Closes</strong><br><span class="note">Final dispositive motions also due.</span></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-date">Sep 2026</div>
+      <div class="tl-event"><strong>Trial — Harris County</strong><br><span class="note">Court-ordered. Postponement explicitly disfavored.</span></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-rule">
+      <div class="section-label">Your Liability</div>
+      <div class="section-line"></div>
+    </div>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:12px; font-style:italic;">MMEFS LLC is the buyer of record. Personal liability: zero. All exposure is limited to the interest itself inside the LLC.</p>
+    <div class="liability">
+      <div class="liability-item"><span>Monthly LOE share (11 wells)</span><span>~$55–165/mo</span></div>
+      <div class="liability-item"><span>P&A costs if ever assessed</span><span>~$1,000–3,000 total</span></div>
+      <div class="liability-item"><span>Litigation liability</span><span>None — not a party</span></div>
+      <div class="liability-item"><span>Personal exposure</span><span>$0</span></div>
+      <div class="liability-item"><span>Maximum realistic downside</span><span>$10,000</span></div>
+    </div>
+
+    <div style="margin-top:20px;">
+    <div class="section-rule">
+      <div class="section-label">Structure</div>
+      <div class="section-line"></div>
+    </div>
+    <p style="font-size:12px; line-height:1.6;">MMEFS LLC acquires and holds the recorded interest. RIC makes a <strong>non-recourse loan</strong> to MMEFS LLC with the assignment as collateral. RIC's only recourse on default is the interest itself — not your personal assets. Recording in McMullen County deed records perfects the collateral.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONDITIONS -->
+<div class="section">
+  <div class="section-rule">
+    <div class="section-label">Before You Close</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="condition">
+    <div class="cond-num">01</div>
+    <div class="cond-text"><strong>Get fully executed notarized assignment</strong> — notary block is currently blank. Do not wire until it is signed and notarized.</div>
+  </div>
+  <div class="condition">
+    <div class="cond-num">02</div>
+    <div class="cond-text"><strong>Wire directly to CIC</strong> — Commonwealth Investment Corporation only. Confirm account details by phone with John Owen independently.</div>
+  </div>
+  <div class="condition">
+    <div class="cond-num">03</div>
+    <div class="cond-text"><strong>Confirm McMullen County recording</strong> — assignment must be recorded promptly after closing. This is what makes the collateral real and perfectable.</div>
+  </div>
+  <div class="condition">
+    <div class="cond-num">04</div>
+    <div class="cond-text"><strong>April 28 is your free look</strong> — execution is April 24. If you can hold to April 28 you see the most important ruling before committing. If not, you're deciding on strong current fundamentals.</div>
+  </div>
+  <div class="condition">
+    <div class="cond-num">05</div>
+    <div class="cond-text"><strong>Attorney for RIC + loan docs</strong> — the investment club structure is sound but needs proper documentation before any capital is raised.</div>
+  </div>
+</div>
+
+<footer>
+  <span>Prepared April 21, 2026 · Based on court documents, docket review, and assignment instrument analysis</span>
+  <span>Not legal or financial advice</span>
+</footer>
+
+</body>
+</html>
